@@ -1,0 +1,1037 @@
+/* ============================================================================
+   SECTIONS.CSS — the layout of each individual band of the page
+
+   base.css set up the shared "design system". This file positions the actual
+   sections: the hero, the project grid, the carousel, the timeline, and so on.
+
+   Read it top to bottom and it follows the page top to bottom.
+   The responsive rules for ALL of it are collected at the very end.
+   ========================================================================= */
+
+
+/* ============================================================================
+   1. HERO — "I see what could exist. Then I build it."
+   ========================================================================= */
+
+.hero {
+  position: relative;          /* the anchor for everything positioned inside */
+  background: var(--navy-deep);
+  color: var(--paper);
+  overflow: hidden;
+  isolation: isolate;          /* keeps the z-index stacking self-contained */
+}
+
+/* The lighthouse photo. "position: absolute" with "inset" pins it to the
+   right-hand side of the hero: 0 from the top, right and bottom edges, and
+   30% in from the left. So it covers the right 70% of the section.
+
+   mask-image fades the photo's own left edge out to nothing. Without it you
+   see a hard vertical seam where the photo starts; with it, the photo
+   dissolves into the navy background exactly like the design. A mask uses
+   the gradient's opacity: transparent parts of the gradient hide the image,
+   opaque parts show it. */
+.hero__media {
+  position: absolute;
+  inset: 0 0 0 30%;
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 20%);
+          mask-image: linear-gradient(to right, transparent 0%, #000 20%);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* fill the box, crop whatever doesn't fit */
+  /* The source photo is much wider than the space it sits in, so most of it
+     gets cropped away. object-position picks WHICH part survives. Raising
+     the first number slides the visible window to the right, which moves the
+     lighthouse left — here just far enough to clear the "currently building"
+     card without hiding behind it. */
+  object-position: 14% 45%;
+}
+
+/* Two gradients laid over the photo:
+   - the first fades from solid navy on the left to transparent, so the
+     headline always has a dark backdrop to sit on
+   - the second darkens the top and bottom edges so the photo blends into
+     the header above and the next section below
+   Because the photo is low resolution, this scrim also hides a lot of the
+   softness — which is why the hero still reads as crisp. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(100deg,
+      var(--navy-deep) 20%,
+      rgba(4, 9, 12, 0.74) 38%,
+      rgba(4, 9, 12, 0.28) 60%,
+      rgba(4, 9, 12, 0.12) 100%),
+    linear-gradient(to bottom,
+      rgba(4, 9, 12, 0.70) 0%,
+      transparent 20%,
+      transparent 74%,
+      rgba(4, 9, 12, 0.60) 100%);
+  pointer-events: none;
+}
+
+/* The actual content sits above both the photo (z-index 0) and the scrim (1). */
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 40px;
+  /* Wider than the standard .container. In the design the "currently
+     building" card sits close to the right edge of the screen, which only
+     happens if the hero is allowed to run wider than the rest of the page. */
+  max-width: 1440px;
+  align-items: center;
+  /* Full screen height on a laptop, but capped on a very tall monitor.
+     The cap matters: the hero photo is wide and short, so the taller the
+     hero gets the more the browser has to zoom into the photo to fill it. */
+  min-height: min(100vh, 760px);
+  /* Push content below the fixed header, and clear the SCROLL rail on the left. */
+  padding-top: calc(var(--header-h) + 30px);
+  padding-bottom: 70px;
+  /* The normal side gutter, plus 46px more, so the headline sits inset from
+     the SCROLL rail rather than on top of it. Using the gutter variable
+     rather than a fixed number keeps it lined up at every screen size. */
+  padding-left: calc(var(--gutter) + 46px);
+}
+
+.hero__content { max-width: 620px; }
+
+/* The headline. Two of its words are styled differently, so in the HTML they
+   are wrapped in <em> and <span> — see index.html. */
+.hero h1 { margin-bottom: 26px; }
+
+.hero h1 em {
+  font-style: italic;   /* "could exist" and "build" are italic in the design */
+}
+
+.hero h1 .accent {
+  color: var(--blue-bright);
+  font-style: italic;
+}
+
+.hero__lede {
+  max-width: 340px;
+  margin-bottom: 34px;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--paper-soft);
+}
+
+/* --- The vertical SCROLL indicator on the far left --- */
+/* An absolutely positioned child measures from its ancestor's border box, so
+   left: 0 would sit hard against the window edge. Offsetting by the gutter
+   drops it neatly into the page margin. */
+.hero__scroll {
+  position: absolute;
+  left: var(--gutter);
+  top: 52%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 3;
+}
+
+/* A thin line that fades in from the top. */
+.hero__scroll-line {
+  width: 1px;
+  height: 116px;
+  background: linear-gradient(to bottom, transparent, rgba(242, 239, 233, 0.55));
+}
+
+/* The dot travels gently up and down forever — see @keyframes below. */
+.hero__scroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--paper);
+  animation: scrollDot 2.6s var(--ease) infinite;
+}
+
+/* "writing-mode: vertical-rl" turns the text on its side. Rotating 180deg
+   then flips it so it reads bottom-to-top, as in the mockup. */
+.hero__scroll span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--paper-soft);
+}
+
+/* @keyframes defines a named animation. 0%/50%/100% are points in time. */
+@keyframes scrollDot {
+  0%, 100% { transform: translateY(0);    opacity: 1;   }
+  50%      { transform: translateY(10px); opacity: 0.45; }
+}
+
+/* --- Right-hand column: the handwritten note and the "currently building" card */
+.hero__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 46px;
+}
+
+.hero__script {
+  align-self: flex-start;
+  /* A negative margin pulls the note left, out over the sea, so it sits
+     clear of the lighthouse instead of on top of it. */
+  margin-left: -7%;
+  font-family: var(--font-script);
+  font-size: clamp(1.3rem, 2.1vw, 1.85rem);
+  line-height: 1.5;
+  color: var(--paper);
+  transform: rotate(-4deg);   /* the slight handwritten tilt */
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Each line is indented a little further than the last, like the mockup.
+   The ">" means "direct children only". Without it this would also turn the
+   little arrow <span> INSIDE each line into a block, pushing the arrow onto
+   its own line instead of sitting next to the word. */
+.hero__script > span { display: block; }
+.hero__script > span:nth-child(2) { padding-left: 26px; }
+.hero__script > span:nth-child(3) { padding-left: 52px; }
+
+.hero__script .arrow { color: var(--gold); }
+
+/* --- The "CURRENTLY BUILDING" glass card --- */
+.hero__card {
+  width: min(330px, 100%);
+  padding: 22px 24px 20px;
+  background: rgba(10, 14, 16, 0.72);
+  backdrop-filter: blur(10px);           /* frosted-glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(242, 239, 233, 0.10);
+  border-radius: 4px;
+}
+
+.hero__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* The little green "I'm live" dot. box-shadow with a large spread and no
+   blur creates the soft halo ring that pulses outward. */
+.hero__card-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-live);
+  animation: pulse 2.2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(135, 198, 126, 0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(135, 198, 126, 0);  }
+  100% { box-shadow: 0 0 0 0 rgba(135, 198, 126, 0);    }
+}
+
+.hero__card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+  font-size: 0.92rem;
+  color: var(--paper);
+}
+
+.hero__card-foot {
+  padding-top: 15px;
+  border-top: 1px solid var(--line-dark);
+}
+
+
+/* ============================================================================
+   2. FEATURED WORK — "What I'm building"
+   ========================================================================= */
+
+.work {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* Three project cards side by side. repeat(3, 1fr) makes three equal columns. */
+.work__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+
+/* ============================================================================
+   3. LEADERSHIP & IMPACT — "Building things. Building people."
+   ========================================================================= */
+
+.lead {
+  position: relative;
+  background: var(--navy-lead);
+  color: var(--paper);
+  overflow: hidden;
+}
+
+/* A faint cloudy texture so the band isn't a flat block of colour. These are
+   just three very large, very transparent radial gradients. */
+.lead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 45% at 18% 20%, rgba(83, 133, 235, 0.10), transparent 70%),
+    radial-gradient(50% 40% at 78% 75%, rgba(204, 185, 153, 0.07), transparent 70%),
+    radial-gradient(70% 60% at 50% 110%, rgba(83, 133, 235, 0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.lead > .container { position: relative; z-index: 1; }
+
+.lead__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;   /* no gap — the dividers below provide the separation instead */
+}
+
+/* Each column gets a hairline on its left edge, and padding to keep the text
+   off that line. The first column's line is removed so the group doesn't
+   start with a stray divider. */
+.lead__item {
+  padding-inline: clamp(20px, 2.4vw, 34px);
+  border-left: 1px solid var(--line-dark);
+}
+
+.lead__item:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.lead__icon {
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+
+.lead__item h3 { margin-bottom: 4px; }
+
+.lead__role {
+  font-size: 0.88rem;
+  color: var(--paper-soft);
+  margin-bottom: 16px;
+}
+
+.lead__item p {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--paper-soft);
+  margin-bottom: 20px;
+}
+
+
+/* ============================================================================
+   4. TECH IN 100 WORDS — the horizontal carousel
+   ========================================================================= */
+
+.explore {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* The hand-drawn underline swoosh under the heading. */
+.explore__swash {
+  color: var(--blue-bright);
+  margin-block: 6px 22px;
+}
+
+/* The carousel needs position:relative so the round arrow button can be
+   positioned against it. */
+.carousel { position: relative; }
+
+/* The scrolling strip itself.
+   - overflow-x: auto   → it can be scrolled sideways (and swiped on a phone)
+   - scroll-snap-type   → scrolling settles neatly on a card instead of halfway
+   - scrollbar hiding   → the mockup has no visible scrollbar
+
+   "proximity" rather than "mandatory" is deliberate. With "mandatory" the
+   browser insists on always sitting exactly on a snap point, and it will
+   drag the strip back to the nearest one — which fights the next button and
+   the dots, so clicking them appears to do nothing. "proximity" snaps only
+   when you finish close to a card, and leaves scripted scrolling alone. */
+.carousel__track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  padding-bottom: 6px;
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* old Edge */
+}
+
+.carousel__track::-webkit-scrollbar { display: none; }  /* Chrome / Safari */
+
+/* "flex: 0 0 SIZE" means: don't grow, don't shrink, be exactly this wide.
+   Without it, flexbox would squeeze all the cards in to fit. */
+.carousel__card {
+  flex: 0 0 clamp(212px, 20vw, 256px);
+  scroll-snap-align: start;
+}
+
+/* The last card snaps by its END edge, not its start.
+   Why this matters: the strip can only scroll until the last card's right
+   edge meets the container's right edge. If every card snapped by its start
+   edge, that final resting place would not be a snap point at all, and the
+   browser would drag the strip back a card — so the last article could never
+   be fully reached and the next button would never switch off. */
+.carousel__card:last-child { scroll-snap-align: end; }
+
+.carousel__card .card__media { aspect-ratio: 20 / 9; }
+
+.carousel__card .card__body { gap: 10px; padding: 18px 18px 20px; }
+
+.carousel__card h3 { font-size: 1.12rem; line-height: 1.25; }
+
+.carousel__card p {
+  font-size: 0.83rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+/* The little "100 words →" strip at the bottom of each card. */
+.carousel__meta {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.carousel__meta svg { transition: transform 0.3s var(--ease); }
+.carousel__card:hover .carousel__meta svg { transform: translateX(4px); }
+
+/* The circular next button, hanging off the right edge and vertically centred. */
+.carousel__next {
+  position: absolute;
+  top: 42%;
+  right: -18px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line-light);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 4px 14px rgba(22, 32, 43, 0.10);
+  transition: transform 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+
+.carousel__next:hover {
+  transform: scale(1.08);
+  background: #fff;
+}
+
+/* Fades the button out once you have scrolled to the end of the track. */
+.carousel__next[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
+/* The pagination dots underneath. */
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 26px;
+}
+
+.carousel__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(22, 32, 43, 0.20);
+  transition: background-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.carousel__dot.is-active {
+  background: var(--blue-bright);
+  transform: scale(1.15);
+}
+
+
+/* ============================================================================
+   5. OUTSIDE THE CODE — the dark band with torn edges
+   ========================================================================= */
+
+.create {
+  position: relative;
+  background: var(--navy-create);
+  color: var(--paper);
+  padding-block: clamp(76px, 8vw, 104px);
+  margin-block: 8px;
+
+  /* clip-path hides everything outside the shape you describe.
+     "polygon()" takes a list of x y points; the browser joins them up in
+     order and clips to that outline. The points below run left-to-right
+     across the top with slightly different heights (a torn paper edge),
+     then right-to-left back across the bottom.
+     Change the percentages and you change the rip. */
+  clip-path: polygon(
+    0% 1.6%,   8% 0.3%,  16% 1.9%,  24% 0.6%,  33% 2.1%,  41% 0.4%,
+    50% 1.7%,  58% 0.5%, 67% 2.0%,  75% 0.7%,  84% 1.8%,  92% 0.4%, 100% 1.5%,
+    100% 98.4%, 92% 99.7%, 84% 98.1%, 75% 99.4%, 67% 97.9%, 58% 99.6%,
+    50% 98.2%, 41% 99.5%, 33% 97.8%, 24% 99.3%, 16% 98.0%, 8% 99.6%, 0% 98.3%
+  );
+}
+
+/* A soft glow so the band has some depth behind the content. */
+.create::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 90% at 30% 50%, rgba(83, 133, 235, 0.08), transparent 72%);
+  pointer-events: none;
+}
+
+.create > .container { position: relative; z-index: 1; }
+
+.create__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Each hobby is a two-column mini-layout: text on the left, photo on the right. */
+.create__item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding-inline: clamp(10px, 1.3vw, 20px);
+  border-left: 1px solid var(--line-dark);
+  min-width: 0;   /* let the column shrink instead of overflowing */
+}
+
+.create__item:first-child { border-left: 0; padding-left: 0; }
+
+/* The text column is a flex column so the link can be pushed to the bottom,
+   which lines every "READ GALLERY / READ MORE / ..." link up across the row
+   even though the descriptions are different lengths. */
+.create__text {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.create__icon { color: var(--gold); margin-bottom: 10px; }
+
+.create__item h3 { font-size: 0.98rem; margin-bottom: 7px; }
+
+.create__item p {
+  font-size: 0.74rem;
+  line-height: 1.6;
+  color: var(--paper-soft);
+  margin-bottom: 16px;
+}
+
+/* "margin-top: auto" in a flex column absorbs all the leftover space above
+   the element, shoving it to the bottom. */
+.create .arrow-link { margin-top: auto; }
+
+.create__thumb {
+  width: clamp(54px, 5.2vw, 76px);
+  aspect-ratio: 79 / 106;
+  overflow: hidden;
+}
+
+.create__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.create__item:hover .create__thumb img { transform: scale(1.06); }
+
+.create .arrow-link { font-size: 0.6rem; }
+
+
+/* ============================================================================
+   6. WHAT I'M FOCUSED ON — the horizontal timeline
+   ========================================================================= */
+
+.focus {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.timeline__items {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.timeline__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.timeline__head svg { color: var(--ink); flex-shrink: 0; }
+
+.timeline__head h3 { font-size: 1rem; }
+
+.timeline__items p {
+  font-size: 0.79rem;
+  line-height: 1.62;
+  color: var(--ink-soft);
+}
+
+/* The rail of dots underneath. The connecting line is drawn as a ::before
+   pseudo-element stretched across the full width and sitting at the vertical
+   midpoint; the dots then sit on top of it. */
+.timeline__rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(26px, 3vw, 40px);
+}
+
+.timeline__rail::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--line-light);
+}
+
+.timeline__node {
+  position: relative;   /* lifts each dot above the line behind it */
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid rgba(22, 32, 43, 0.22);
+}
+
+/* The first node is filled in, showing where you currently are. */
+.timeline__node.is-current {
+  background: var(--blue-bright);
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 4px rgba(83, 133, 235, 0.16);
+}
+
+
+/* ============================================================================
+   7. SUBPAGE HEADER — the dark banner at the top of work/lead/explore/...
+   ========================================================================= */
+
+.page-head {
+  position: relative;
+  background: var(--navy-deep);
+  color: var(--paper);
+  padding-top: calc(var(--header-h) + clamp(56px, 7vw, 96px));
+  padding-bottom: clamp(56px, 7vw, 92px);
+  overflow: hidden;
+}
+
+.page-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(55% 60% at 78% 30%, rgba(83, 133, 235, 0.13), transparent 70%),
+    radial-gradient(45% 50% at 12% 90%, rgba(204, 185, 153, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.page-head > .container { position: relative; z-index: 1; }
+
+.page-head h1 {
+  font-size: clamp(2.4rem, 5vw, 3.9rem);
+  margin-block: 16px 20px;
+}
+
+.page-head .lede {
+  max-width: 560px;
+  color: var(--paper-soft);
+  font-size: 1rem;
+}
+
+/* A back-to-home link at the top of each subpage.
+   "display: flex" (rather than inline-flex) makes this a block-level box, so
+   the eyebrow that follows starts on a new line instead of running on beside
+   it. "width: fit-content" then stops the box stretching the full page width,
+   which would make the whole strip clickable. */
+.page-head__back {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-soft);
+  margin-bottom: 26px;
+  transition: gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.page-head__back:hover { gap: 14px; color: var(--paper); }
+.page-head__back svg { transform: rotate(180deg); }  /* point the arrow left */
+
+
+/* ============================================================================
+   8. SUBPAGE CONTENT LAYOUTS
+   ========================================================================= */
+
+/* A plain responsive card grid, used on work.html, explore.html, create.html.
+   auto-fit + minmax is the classic "responsive grid with no media queries":
+   fit as many columns as will fit at 280px or wider, then share out the space. */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* A stacked list of long entries, used on lead.html and about.html. */
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: clamp(20px, 4vw, 56px);
+  padding-block: clamp(30px, 4vw, 46px);
+  border-top: 1px solid var(--line-light);
+}
+
+.entry:last-child { border-bottom: 1px solid var(--line-light); }
+
+.entry__meta {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.entry__body h3 { margin-bottom: 6px; }
+
+.entry__role {
+  font-size: 0.9rem;
+  color: var(--blue-eyebrow);
+  margin-bottom: 14px;
+}
+
+.entry__body p {
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+  max-width: 70ch;   /* ~70 characters is the comfortable reading limit */
+}
+
+/* A bulleted list of highlights inside an entry. */
+.entry__points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.entry__points li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.entry__points li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 11px;
+  width: 6px;
+  height: 1px;
+  background: var(--blue-eyebrow);
+}
+
+/* Two-column prose layout for about.html. */
+.prose-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+
+.prose p {
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+.prose p:first-child {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* A vertical version of the timeline, for about.html. */
+.vtimeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.vtimeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--line-light);
+}
+
+.vtimeline__item { position: relative; padding-bottom: 30px; }
+
+.vtimeline__item::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 7px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid rgba(22, 32, 43, 0.22);
+}
+
+.vtimeline__item.is-current::before {
+  background: var(--blue-bright);
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 4px rgba(83, 133, 235, 0.16);
+}
+
+.vtimeline__item h3 { font-size: 1.05rem; margin-bottom: 4px; }
+
+.vtimeline__item p {
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+
+/* ============================================================================
+   9. RESPONSIVE RULES
+   ----------------------------------------------------------------------------
+   A "media query" applies its rules only when the condition is true.
+   "max-width: 1024px" means "when the window is 1024px wide or narrower".
+
+   We work from wide to narrow, each breakpoint simplifying the layout further.
+   ========================================================================= */
+
+/* ---------- Tablets and small laptops ---------- */
+@media (max-width: 1024px) {
+
+  /* The intro-plus-content split becomes one column, stacked. */
+  .split {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  /* --- Hero: stop side-by-side, let the photo become a full backdrop --- */
+  .hero__media { inset: 0; }   /* photo now covers the whole hero */
+
+  .hero__scrim {
+    /* Darken the whole thing evenly so text is readable anywhere on it. */
+    background:
+      linear-gradient(to bottom,
+        rgba(4, 9, 12, 0.88) 0%,
+        rgba(4, 9, 12, 0.72) 45%,
+        rgba(4, 9, 12, 0.92) 100%);
+  }
+
+  .hero__inner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: calc(var(--header-h) + 56px);
+    padding-bottom: 64px;
+    padding-left: var(--gutter);   /* the rail is hidden here, so no extra inset */
+    gap: 48px;
+  }
+
+  .hero__scroll { display: none; }   /* no room for the side rail */
+
+  .hero__aside { align-items: flex-start; gap: 34px; }
+
+  .hero__script { transform: none; }
+
+  .hero__card { width: min(360px, 100%); }
+
+  /* --- Grids drop to two columns --- */
+  .work__grid,
+  .lead__grid,
+  .create__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* With two columns, the "first child only" divider rule no longer works —
+     nth-child(odd) is the first item of each row. */
+  .lead__item,
+  .create__item {
+    border-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .lead__item { padding-bottom: 8px; }
+
+  .carousel__next { right: -6px; }
+
+  /* --- Timeline goes vertical --- */
+  .timeline__items {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+  }
+
+  .timeline__rail { display: none; }  /* the rail only makes sense in a row */
+
+  .entry { grid-template-columns: 1fr; gap: 10px; }
+
+  .prose-split { grid-template-columns: 1fr; }
+}
+
+
+/* ---------- Phones ---------- */
+@media (max-width: 720px) {
+
+  /* --- Turn the nav into a slide-down menu ---
+     The nav is taken out of the header bar and becomes a panel below it. */
+  .nav-toggle { display: block; }
+
+  .nav {
+    position: fixed;
+    inset: var(--header-h) 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px var(--gutter) 24px;
+    /* Fully opaque, not semi-transparent: the page behind must not show
+       through a menu you are trying to read. */
+    background: var(--navy-deep);
+    border-bottom: 1px solid var(--line-dark);
+
+    /* Hidden by default: shifted up, faded out, and non-interactive.
+       We animate these three properties rather than display:none, because
+       display can't be transitioned. */
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease),
+                visibility 0.3s var(--ease);
+  }
+
+  /* script.js adds .is-open to the nav when the hamburger is tapped. */
+  .nav.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav__link {
+    padding-block: 14px;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  /* The active dot has nowhere sensible to sit in a stacked menu. */
+  .nav__link::after { display: none; }
+
+  .brand__name { display: none; }   /* keep just the AP monogram on phones */
+
+  /* --- Everything becomes a single column --- */
+  .work__grid,
+  .lead__grid,
+  .create__grid,
+  .timeline__items {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  /* Separate the stacked items with a horizontal line instead of a vertical one. */
+  .lead__item + .lead__item,
+  .create__item + .create__item {
+    border-top: 1px solid var(--line-dark);
+    padding-top: 26px;
+  }
+
+  .create__thumb { width: 76px; }
+
+  /* Straighten the torn edge a little so it doesn't eat the content on a
+     narrow screen (percentages of a short width become large gaps). */
+  .create { clip-path: none; border-block: 1px solid var(--line-dark); }
+
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+  }
+
+  .footer__meta {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line-dark);
+    padding-top: 22px;
+  }
+
+  .footer__compass { display: none; }
+
+  .carousel__next { display: none; }  /* swiping is the natural gesture here */
+
+  .hero__card { width: 100%; }
+}
+
+/* Reading page: keep book covers uncropped and make room for future reads. */
+.current-reads { margin-top: 40px; }
+.reading-list { list-style: none; padding: 0; margin: 24px 0 0; }
+.reading-list__book {
+  display: flex;
+  flex-wrap: wrap; /* Stack naturally when the screen gets narrow. */
+  align-items: center;
+  gap: 28px;
+  padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+}
+.reading-list__book + .reading-list__book { margin-top: 20px; }
+.reading-list__cover {
+  width: 150px;
+  max-width: 100%;
+  height: auto; /* Preserve the full cover's original proportions. */
+  box-shadow: 0 8px 20px rgba(4, 9, 12, 0.15);
+}
+.reading-list__book h3 { margin: 0 0 8px; }
+.reading-list__book .lede { margin: 0; }

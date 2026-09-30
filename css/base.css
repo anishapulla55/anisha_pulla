@@ -1,0 +1,669 @@
+/* ============================================================================
+   BASE.CSS — the "design system"
+
+   This file holds everything that is shared by EVERY page:
+     1. Design tokens (the colours, fonts and sizes, defined once)
+     2. A small reset (undoing the browser's default styling)
+     3. Typography
+     4. The header (top navigation bar)
+     5. The footer
+     6. Reusable pieces (buttons, links, cards, labels)
+     7. The scroll-reveal animation
+
+   Page-specific layout lives in sections.css instead.
+   ========================================================================= */
+
+
+/* ----------------------------------------------------------------------------
+   1. DESIGN TOKENS
+   ----------------------------------------------------------------------------
+   ":root" means "the whole document". Anything defined here is available
+   everywhere. The "--name: value" syntax creates a CSS custom property (also
+   called a CSS variable). You read it back with var(--name).
+
+   Why bother? Because the colour #04090C appears in a dozen places. If it
+   lives in one variable, changing the site's whole colour scheme is a
+   one-line edit instead of a find-and-replace.
+
+   Every colour below was sampled from the actual pixels of the design mockup.
+-------------------------------------------------------------------------- */
+:root {
+  /* --- Dark backgrounds (each band of the page is a slightly different navy) */
+  --navy-deep:    #04090C;   /* hero */
+  --navy-lead:    #071115;   /* "Building things. Building people." band */
+  --navy-create:  #0C1113;   /* "Outside the code" band */
+  --navy-footer:  #040E18;   /* footer */
+
+  /* --- Light backgrounds */
+  --cream:        #F2EFE9;   /* the off-white section background */
+  --card:         #F9F4EE;   /* slightly lighter, for cards sitting on cream */
+
+  /* --- Accent colours */
+  --blue-bright:  #5385EB;   /* the italic word "build" in the headline */
+  --blue-eyebrow: #365DA7;   /* small uppercase labels on cream */
+  --gold:         #CCB999;   /* links on the dark bands */
+  --green-live:   #87C67E;   /* the pulsing "currently building" dot */
+  --purple:       #745DB0;   /* the PLATFORM label */
+  --purple-light: #A790C4;   /* the CREATE label (on a dark background) */
+  --sage:         #A5CBA4;   /* the SOCIAL IMPACT label */
+
+  /* --- Text colours.
+         "ink" = dark text on light backgrounds.
+         "paper" = light text on dark backgrounds.
+         The "-soft" versions are muted, for body copy and captions. */
+  --ink:          #16202B;
+  --ink-soft:     #5A6470;
+  --paper:        #F2EFE9;
+  --paper-soft:   rgba(242, 239, 233, 0.70);
+
+  /* --- Hairline borders */
+  --line-dark:    rgba(242, 239, 233, 0.14);  /* a faint line on dark */
+  --line-light:   rgba(22, 32, 43, 0.12);     /* a faint line on cream */
+
+  /* --- Fonts.
+         Each is a "stack": the browser tries the first font, and if it hasn't
+         loaded yet it falls back to the next one. */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-script:  'Caveat', 'Segoe Script', cursive;
+
+  /* --- Layout sizing */
+  --page-max:     1290px;   /* the widest the content ever gets */
+  --gutter:       clamp(20px, 4vw, 56px);  /* side padding, grows with screen */
+  --header-h:     74px;     /* height of the fixed top bar */
+
+  /* --- One shared easing curve so every animation feels like the same site */
+  --ease:         cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+
+/* ----------------------------------------------------------------------------
+   2. RESET
+   ----------------------------------------------------------------------------
+   Browsers ship with their own default styles (margins on headings, bullets on
+   lists, blue underlined links). These few rules wipe the defaults we don't
+   want, so we start from a predictable blank slate.
+-------------------------------------------------------------------------- */
+
+/* "*" selects every element. "::before/::after" are the two invisible pseudo
+   elements CSS can add to anything. box-sizing: border-box makes width mean
+   "the total width including padding and border" — which is what you almost
+   always want, and is not the browser default. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Kill the default margin on everything that has one. */
+body, h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd {
+  margin: 0;
+}
+
+/* Strip bullets and the indent off lists. */
+ul, ol {
+  list-style: none;
+  padding: 0;
+}
+
+html {
+  /* When a link jumps to "#work", glide there instead of teleporting. */
+  scroll-behavior: smooth;
+  /* Anchored sections stop below the fixed header rather than under it. */
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--cream);
+  /* Smooths font edges — noticeable on the light-text-on-dark sections. */
+  -webkit-font-smoothing: antialiased;
+  /* Stops a stray wide element from causing sideways scrolling on phones. */
+  overflow-x: hidden;
+}
+
+/* Images should never overflow their container, and should sit on the text
+   baseline like a block rather than leaving a mysterious gap underneath. */
+img, svg {
+  max-width: 100%;
+  display: block;
+}
+
+/* Links inherit the surrounding text colour instead of being browser-blue. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Form controls don't inherit fonts by default. Make them behave. */
+button, input, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* A visible focus ring for keyboard users. ":focus-visible" only fires for
+   keyboard navigation, so mouse clicks don't get an outline. Never remove
+   this — it is how keyboard-only users know where they are. */
+:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+
+/* ----------------------------------------------------------------------------
+   3. TYPOGRAPHY
+-------------------------------------------------------------------------- */
+
+/* All the big headings use the serif display font. */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 400;         /* Playfair looks best at regular weight, not bold */
+  line-height: 1.08;
+  letter-spacing: -0.015em; /* pull letters very slightly together at big sizes */
+  color: inherit;
+}
+
+/* clamp(MIN, PREFERRED, MAX) is "fluid typography": the font size scales with
+   the viewport width but never goes below MIN or above MAX. This is what makes
+   the headline shrink gracefully on a phone without any media query. */
+h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); }
+h2 { font-size: clamp(2rem, 3.6vw, 3.1rem); }
+h3 { font-size: clamp(1.15rem, 1.5vw, 1.4rem); }
+
+p { color: inherit; }
+
+/* The handwritten font, used for "vision / action / impact" and the footer. */
+.script {
+  font-family: var(--font-script);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+/* An "eyebrow" is the tiny uppercase label above a heading
+   (FEATURED WORK, LEADERSHIP & IMPACT, CREATE...). */
+.eyebrow {
+  font-size: 0.685rem;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--blue-eyebrow);
+}
+
+/* Modifier classes — same eyebrow, different colour. */
+.eyebrow--gold   { color: var(--gold); }
+.eyebrow--purple { color: var(--purple); }
+.eyebrow--purple-light { color: var(--purple-light); }
+.eyebrow--sage   { color: var(--sage); }
+.eyebrow--paper  { color: var(--paper-soft); }
+
+/* Muted body copy. */
+.lede {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+/* The same, but for dark backgrounds. */
+.lede--paper { color: var(--paper-soft); }
+
+/* Screen-reader-only: visually hidden, still read aloud by assistive tech.
+   Used for labels that would be visual clutter but are needed for context. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+   4. LAYOUT HELPERS
+-------------------------------------------------------------------------- */
+
+/* Centres content and stops it stretching too wide on a big monitor.
+   "margin-inline: auto" is shorthand for equal left and right auto margins. */
+.container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Every full-width horizontal band of the page. */
+.section {
+  padding-block: clamp(64px, 8vw, 108px);
+}
+
+/* Most sections are a narrow intro column on the left and content on the right.
+   grid-template-columns: 340px 1fr means "left column is exactly 340px, right
+   column takes all the remaining space". */
+.split {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+/* IMPORTANT and easy to miss: by default a grid or flex item refuses to shrink
+   below the width of its own content. So a sideways-scrolling strip inside a
+   grid column would push the column wider than the page instead of scrolling.
+   "min-width: 0" removes that floor and lets the column stay put. */
+.split > * { min-width: 0; }
+
+/* A narrower intro column, for sections whose content needs more room. */
+.split--tight { grid-template-columns: 200px 1fr; }
+
+/* The left intro column: eyebrow, heading, paragraph, link. */
+.split__intro h2 { margin-block: 18px 20px; }
+.split__intro .lede { margin-bottom: 26px; }
+
+
+/* ----------------------------------------------------------------------------
+   5. HEADER
+-------------------------------------------------------------------------- */
+
+.header {
+  position: fixed;          /* stays put while the page scrolls behind it */
+  inset: 0 0 auto 0;        /* shorthand for top:0; right:0; bottom:auto; left:0 */
+  z-index: 100;             /* sits above everything else */
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  color: var(--paper);
+  /* Animate the background so it fades in rather than snapping. */
+  transition: background-color 0.35s var(--ease), backdrop-filter 0.35s var(--ease),
+              border-color 0.35s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+
+/* script.js adds this class once you've scrolled past 40px, so the bar gets a
+   dark frosted background and stays readable over the cream sections. */
+.header.is-scrolled {
+  background-color: rgba(4, 9, 12, 0.82);
+  backdrop-filter: blur(14px);          /* frosts whatever is behind it */
+  -webkit-backdrop-filter: blur(14px);  /* Safari needs the prefixed version */
+  border-bottom-color: var(--line-dark);
+}
+
+.header__inner {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* pushes brand left, nav right */
+  gap: 24px;
+}
+
+/* --- Brand (the "AP" monogram plus the full name) --- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand__mark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+}
+
+.brand__name {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--paper);
+  white-space: nowrap;  /* never split "ANISHA PULLA" across two lines */
+}
+
+/* --- Navigation --- */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.6vw, 40px);
+  /* "margin-left: auto" eats all the spare space to the left of the nav,
+     which pushes the nav and the Resume button over to the right-hand side
+     while the brand stays pinned to the left. */
+  margin-left: auto;
+  margin-right: clamp(20px, 3vw, 46px);
+}
+
+.nav__link {
+  position: relative;  /* needed so the ::after dot can position against it */
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  opacity: 0.82;
+  padding-block: 6px;
+  transition: opacity 0.25s var(--ease);
+}
+
+.nav__link:hover { opacity: 1; }
+
+/* The small blue dot under the current page's link (visible in the mockup
+   under "WORK"). ::after invents an extra element after the link's text;
+   because it has no content of its own we give it content:"" and a size. */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;              /* centres it: half of the 4px width */
+  border-radius: 50%;             /* a square with 50% radius is a circle */
+  background: var(--blue-bright);
+  opacity: 0;                     /* hidden by default... */
+  transition: opacity 0.3s var(--ease);
+}
+
+/* ...and revealed only on the link marked as the current page. */
+.nav__link.is-active { opacity: 1; }
+.nav__link.is-active::after { opacity: 1; }
+
+/* --- The RESUME pill button --- */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 8px 9px 20px;
+  border-radius: 999px;          /* any huge number gives a perfect pill */
+  background: var(--paper);
+  color: var(--navy-deep);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.btn-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+/* The circular arrow badge inside the pill. */
+.btn-pill__arrow {
+  display: grid;
+  place-items: center;           /* centres the arrow both ways in one line */
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy-deep);
+  color: var(--paper);
+  transition: transform 0.25s var(--ease);
+}
+
+.btn-pill:hover .btn-pill__arrow { transform: translateX(3px); }
+
+/* --- Mobile menu button (hidden on desktop, shown by the media query
+       at the bottom of sections.css) --- */
+.nav-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  color: var(--paper);
+}
+
+.nav-toggle__bar {
+  display: block;
+  height: 1.5px;
+  background: currentColor;   /* "currentColor" = whatever the text colour is */
+  margin-block: 4px;
+  transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+/* When the menu is open, the top and bottom bars rotate into an X and the
+   middle one fades out. */
+.nav-toggle.is-open .nav-toggle__bar:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav-toggle.is-open .nav-toggle__bar:nth-child(2) { opacity: 0; }
+.nav-toggle.is-open .nav-toggle__bar:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+
+/* ----------------------------------------------------------------------------
+   6. REUSABLE COMPONENTS
+-------------------------------------------------------------------------- */
+
+/* --- Outlined button ("EXPLORE MY WORK" in the hero) --- */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 26px;
+  border: 1px solid rgba(242, 239, 233, 0.55);
+  color: var(--paper);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.btn-outline:hover {
+  background: rgba(242, 239, 233, 0.10);
+  border-color: var(--paper);
+}
+
+/* The arrow slides right on hover. Because the <svg> is a child of the button,
+   we target it from the button's :hover state. */
+.btn-outline svg { transition: transform 0.3s var(--ease); }
+.btn-outline:hover svg { transform: translateX(4px); }
+
+/* --- Text link with a trailing arrow (VIEW ALL PROJECTS, LEARN MORE, ...) --- */
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-eyebrow);
+  transition: gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+/* Growing the gap on hover makes the arrow slide away from the text. */
+.arrow-link:hover { gap: 16px; }
+
+/* Colour variants for the different backgrounds. */
+.arrow-link--gold  { color: var(--gold); }
+.arrow-link--paper { color: var(--paper-soft); }
+.arrow-link--paper:hover { color: var(--paper); }
+
+/* --- Card (used for projects, articles and gallery items) --- */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line-light);
+  overflow: hidden;             /* clips the image to the card's corners */
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(22, 32, 43, 0.13);
+}
+
+/* The image wrapper. aspect-ratio reserves the right amount of space before
+   the image loads, so the page doesn't jump around as things download. */
+.card__media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--navy-deep);
+}
+
+/* object-fit: cover makes the photo fill the box and crop the overflow,
+   exactly like background-size: cover. Without it the image would squash. */
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.card:hover .card__media img { transform: scale(1.05); }
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 22px 24px;
+  flex: 1;   /* makes every card in a row the same height */
+}
+
+.card__body h3 { margin-top: 2px; }
+
+/* Pushes the footer link to the bottom of the card, so links line up across
+   a row even when the descriptions are different lengths. */
+.card__foot { margin-top: auto; padding-top: 6px; }
+
+
+/* ----------------------------------------------------------------------------
+   7. FOOTER
+-------------------------------------------------------------------------- */
+
+.footer {
+  position: relative;
+  background: var(--navy-footer);
+  color: var(--paper);
+  padding-block: clamp(48px, 6vw, 74px);
+  overflow: hidden;
+}
+
+/* A very subtle starfield: two soft radial gradients over the navy. */
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1.5px 1.5px at 45% 15%, rgba(255,255,255,0.20), transparent);
+  pointer-events: none;   /* the decoration must never block clicks */
+}
+
+.footer__inner {
+  position: relative;   /* lifts the content above the ::before starfield */
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr auto;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+
+.footer__script {
+  font-family: var(--font-script);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.25;
+  color: var(--paper);
+}
+
+.footer__heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 18px;
+}
+
+.footer__socials {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper-soft);
+  transition: color 0.25s var(--ease);
+}
+
+.footer__social:hover { color: var(--paper); }
+
+/* The label is underlined in the mockup; the icon is not. */
+.footer__social span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(242, 239, 233, 0.35);
+}
+
+.footer__meta {
+  font-size: 0.76rem;
+  line-height: 1.9;
+  color: var(--paper-soft);
+  border-left: 1px solid var(--line-dark);
+  padding-left: clamp(20px, 3vw, 40px);
+}
+
+.footer__heart { color: var(--purple-light); }
+
+.footer__compass { color: var(--gold); opacity: 0.65; }
+
+
+/* ----------------------------------------------------------------------------
+   8. SCROLL REVEAL
+   ----------------------------------------------------------------------------
+   Elements with class="reveal" start faded out and nudged down, then script.js
+   adds .is-visible when they scroll into view and they animate into place.
+
+   IMPORTANT — "failing open": notice every rule below is prefixed with ".js".
+   An inline script in the <head> of each page adds class="js" to <html>.
+   So if JavaScript is broken or disabled, ".js" never exists, these rules
+   never apply, and the content is simply visible. Content must never be
+   hidden by an animation that might not run.
+-------------------------------------------------------------------------- */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggering: give children incremental delays so a row of cards animates in
+   one after another instead of all at once. */
+.js .reveal[data-delay="1"] { transition-delay: 0.09s; }
+.js .reveal[data-delay="2"] { transition-delay: 0.18s; }
+.js .reveal[data-delay="3"] { transition-delay: 0.27s; }
+.js .reveal[data-delay="4"] { transition-delay: 0.36s; }
+
+/* Respect the operating-system "reduce motion" accessibility setting. If the
+   user has asked for less movement, we turn every animation off. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .js .reveal { opacity: 1; transform: none; }
+}

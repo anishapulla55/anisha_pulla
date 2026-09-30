@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!-- EXPLORE.HTML — every "Tech in 100 Words or Less" post.
+     On the homepage these four are a sideways-scrolling carousel. Here they
+     are just a plain grid, because there is no reason to hide content on the
+     page whose whole purpose is to show it.
+     Head, header and footer are copied from index.html — see the note there. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Short, plain-language explanations of AI and software concepts — each in about 100 words." />
+  <title>Explore — Anisha Pulla</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body>
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Anisha Pulla — home">
+        <span class="brand__mark">AP</span>
+        <span class="brand__name">Anisha Pulla</span>
+      </a>
+
+      <nav class="nav" id="primary-nav">
+        <a class="nav__link" href="work.html">Work</a>
+        <a class="nav__link" href="lead.html">Lead</a>
+        <a class="nav__link" href="explore.html">Explore</a>
+        <a class="nav__link" href="create.html">Create</a>
+        <a class="nav__link" href="about.html">About</a>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <!-- Open the resume PDF in a new tab. -->
+        <a class="btn-pill" href="Anisha_Pulla_Resume.pdf" id="resume-link" target="_blank" rel="noopener">
+          Resume
+          <span class="btn-pill__arrow">
+            <svg width="13" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu"
+                aria-controls="primary-nav" aria-expanded="false">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <main id="main">
+
+    <section class="page-head">
+      <div class="container">
+        <a class="page-head__back" href="index.html">
+          <svg width="15" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+            <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back home
+        </a>
+        <span class="eyebrow eyebrow--gold">Explore</span>
+        <h1>Tech in 100 Words or Less</h1>
+        <p class="lede">
+          Short explanations of interesting technologies, concepts, and ideas
+          I'm learning about. Finding the answer when curiosity takes over.
+        </p>
+      </div>
+    </section>
+
+    <section class="section explore">
+      <div class="container">
+        <!-- .grid-cards fits as many columns as will comfortably fit and
+             reflows on its own, with no media query needed. -->
+        <div class="grid-cards">
+
+          <article class="card reveal" id="what-is-rag">
+            <div class="card__media">
+              <!-- REPLACE: images/explore-1.jpg -->
+              <img src="images/explore-1.jpg" alt="Flowing blue topographic lines" />
+            </div>
+            <div class="card__body">
+              <h3>What is RAG?</h3>
+              <p class="lede">Imagine asking an AI assistant a question about your project notes. Retrieval Augmented Generation (RAG) lets it search those notes and use relevant passages when writing an answer. This gives the model information beyond its training data, without retraining it every time a document changes. It can also include sources, making the answer easier to check. The quality still depends on what the search finds and how the model uses it. RAG is useful when you want answers grounded in a particular collection of information, such as research papers, company documents, or your own files.</p>
+              
+            </div>
+          </article>
+
+          
+
+          <article class="card reveal" data-delay="2" id="vector-databases">
+            <div class="card__media">
+              <!-- REPLACE: images/explore-3.jpg -->
+              <img src="images/explore-3.jpg" alt="A cluster of floating grey cubes" />
+            </div>
+            <div class="card__body">
+              <h3>Why are vector databases useful?</h3>
+              <p class="lede">You might search for “fix a leaking tap” and find a guide titled “faucet repair.” A vector database helps make that connection. It stores embeddings: lists of numbers that represent features of text, images, or other data. An embedding model places related items near one another, and the database searches for those nearby matches. This is useful when people describe the same thing in different words. It supports document search, recommendations, and finding similar images. Results depend on the embedding model and the data, so a close match still needs to be checked for relevance.</p>
+              
+            </div>
+          </article>
+
+          <article class="card reveal" data-delay="3" id="mcp-server">
+            <div class="card__media">
+              <!-- REPLACE: images/explore-4.jpg -->
+              <img src="images/explore-4.jpg" alt="A dark code editor window" />
+            </div>
+            <div class="card__body">
+              <h3>What is an MCP server?</h3>
+              <p class="lede">An AI assistant becomes more useful when it can work with the tools you already use. An MCP server provides a connection through the Model Context Protocol. It can make tools, data, and reusable prompts available to a compatible AI application. For example, a server could let an assistant search project files or look up information in a database. The application decides which capabilities to use, within its permissions. Having a shared protocol makes integrations easier to reuse, though each application may support different features. The server supplies access; the AI application handles the conversation.</p>
+              
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__script">
+        Let's build something<br />extraordinary together.
+      </p>
+
+      <div>
+        <h2 class="footer__heading">Let's connect!</h2>
+        <div class="footer__socials">
+          <!-- Email contact link. -->
+          <a class="footer__social" href="mailto:anishapulla55@gmail.com">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2.5" y="5" width="19" height="14" rx="1.8"/>
+              <path d="m3 6.5 9 6.6 9-6.6"/>
+            </svg>
+            <span>Email me</span>
+          </a>
+          <!-- LinkedIn profile. -->
+          <a class="footer__social" href="https://www.linkedin.com/in/anisha-pulla" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M4.98 3.5a2.5 2.5 0 1 0 .02 5 2.5 2.5 0 0 0-.02-5ZM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.3c0-1.27-.02-2.9-1.8-2.9-1.8 0-2.07 1.38-2.07 2.81V21h-4z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <!-- GitHub profile. -->
+          <a class="footer__social" href="https://github.com/anishapulla55" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.05.78 2.12v3.15c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__meta">
+        <p>&copy; 2026 Anisha Pulla</p>
+        <p>Designed &amp; built with <span class="footer__heart">&hearts;</span><br />and lots of coffee</p>
+      </div>
+
+      <svg class="footer__compass" width="64" height="64" viewBox="0 0 64 64" fill="none"
+           stroke="currentColor" stroke-width="1" aria-hidden="true">
+        <path d="M32 3 35.5 28.5 61 32 35.5 35.5 32 61 28.5 35.5 3 32 28.5 28.5Z"/>
+        <path d="M48 16 34.5 29.5M16 48l13.5-13.5M48 48 34.5 34.5M16 16l13.5 13.5" opacity="0.55"/>
+      </svg>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

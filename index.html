@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<!-- ===========================================================================
+     INDEX.HTML — the homepage.
+
+     A quick orientation if you're new to HTML:
+       * Everything lives inside tags, written <like-this> ... </like-this>.
+       * <head> is information ABOUT the page (title, fonts, stylesheets).
+         Nothing in it appears on screen.
+       * <body> is the page itself — everything you can actually see.
+       * class="..." is a label. CSS uses those labels to decide how to style
+         the element. They do nothing on their own.
+     ======================================================================== -->
+<html lang="en">
+<head>
+  <!-- Tells the browser the file is written in UTF-8, so accented characters,
+       em dashes and emoji all display correctly. -->
+  <meta charset="UTF-8" />
+
+  <!-- The single most important line for mobile. It tells phones "render this
+       at the real device width", instead of pretending to be a desktop and
+       zooming out. Without it, every responsive rule we wrote is ignored. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Shown by Google and when the link is shared. -->
+  <meta name="description" content="Anisha Pulla — computer scientist, AI engineer, and entrepreneur turning ideas into real impact." />
+
+  <!-- The text in the browser tab. -->
+  <title>Anisha Pulla — I see what could exist. Then I build it.</title>
+
+  <!-- Google Fonts. "preconnect" is a performance hint: start opening the
+       network connection now, before we know exactly which file we need. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+
+  <!-- Our own stylesheets. Order matters: base.css defines the variables and
+       shared components, sections.css builds on top of them. -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+
+  <!-- This tiny script runs immediately and adds class="js" to the <html> tag.
+       The scroll-reveal CSS is written as ".js .reveal { opacity: 0 }", so if
+       JavaScript is switched off this class never appears, the hiding rule
+       never applies, and all the content is simply visible.
+       That is called "failing open" — never hide content behind a script. -->
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    .skills { background: var(--paper); border-bottom: 1px solid var(--line-light); }
+    .skills__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+    .skills__group { min-width: 0; padding-top: 20px; border-top: 1px solid var(--line-light); }
+    .skills__group h3 { margin-bottom: 18px; }
+    .skills__tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; }
+    .skills__tags li { padding: 6px 12px; border: 1px solid var(--line-light); border-radius: 20px; font-size: .85rem; line-height: 1.5; color: var(--ink-soft); }
+    .skills__credentials { list-style: none; display: grid; gap: 12px; color: var(--ink-soft); font-size: .9rem; line-height: 1.7; }
+    .skills__credentials li { padding-left: 14px; border-left: 2px solid var(--blue-eyebrow); }
+    @media (max-width: 640px) { .skills__grid { grid-template-columns: 1fr; gap: 28px; } }
+  </style>
+</head>
+
+<body>
+
+  <!-- A "skip link": invisible until a keyboard user tabs to it, then it lets
+       them jump straight past the navigation to the content. -->
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <!-- =====================================================================
+       HEADER — fixed to the top of the window on every page.
+       ===================================================================== -->
+  <header class="header" id="site-header">
+    <div class="header__inner">
+
+      <!-- Brand: the AP monogram plus the full name. -->
+      <a class="brand" href="index.html" aria-label="Anisha Pulla — home">
+        <span class="brand__mark">AP</span>
+        <span class="brand__name">Anisha Pulla</span>
+      </a>
+
+      <!-- The <nav> element tells screen readers "this is the main menu".
+           On phones, CSS turns this into a drop-down panel. -->
+      <nav class="nav" id="primary-nav">
+        <a class="nav__link" href="work.html">Work</a>
+        <a class="nav__link" href="lead.html">Lead</a>
+        <a class="nav__link" href="explore.html">Explore</a>
+        <a class="nav__link" href="create.html">Create</a>
+        <a class="nav__link" href="about.html">About</a>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <!-- Open the resume PDF in a new tab. -->
+        <a class="btn-pill" href="Anisha_Pulla_Resume.pdf" id="resume-link" target="_blank" rel="noopener">
+          Resume
+          <span class="btn-pill__arrow">
+            <svg width="13" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+
+        <!-- The hamburger button. It is hidden on desktop by CSS.
+             aria-expanded tells assistive tech whether the menu is open;
+             script.js keeps that value up to date. -->
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu"
+                aria-controls="primary-nav" aria-expanded="false">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <main id="main">
+
+    <!-- ===================================================================
+         SECTION 1 — HERO
+         =================================================================== -->
+    <section class="hero" id="top">
+
+      <!-- The background photograph.
+           REPLACE: swap images/hero-lighthouse.jpg for your own photo.
+           Nothing else needs to change — the CSS crops it to fit. -->
+      <div class="hero__media">
+        <img src="images/hero-lighthouse.jpg"
+             alt="A lighthouse on a cliff above the sea at sunset" />
+      </div>
+
+      <!-- The dark gradient laid over the photo so the text stays readable. -->
+      <div class="hero__scrim"></div>
+
+      <div class="container hero__inner">
+
+        <!-- The vertical SCROLL rail on the far left. aria-hidden="true" hides
+             it from screen readers, because it is purely decorative. -->
+        <div class="hero__scroll" aria-hidden="true">
+          <span class="hero__scroll-line"></span>
+          <span class="hero__scroll-dot"></span>
+          <span>Scroll</span>
+        </div>
+
+        <div class="hero__content">
+          <!-- <h1> is the single most important heading on the page; there
+               should only ever be one. <br /> forces a line break so the
+               headline breaks exactly where the design does. -->
+          <h1>
+            I see what<br />
+            <em>could exist.</em><br />
+            Then I <em class="accent">build</em> it.
+          </h1>
+
+          <p class="hero__lede">
+            Computer scientist, AI engineer, and entrepreneur
+            passionate about turning ideas into real impact.
+          </p>
+
+          <!-- Open the About page from the main headline. -->
+          <a class="btn-outline" href="about.html">
+            About me
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="hero__aside">
+
+          <!-- The handwritten "vision / action / impact" note. -->
+          <p class="hero__script" aria-hidden="true">
+            <span>vision</span>
+            <span><span class="arrow">&rarr;</span> action</span>
+            <span><span class="arrow">&rarr;</span> impact</span>
+          </p>
+
+          <!-- The frosted "currently building" card.
+               <aside> means "related but not the main content". -->
+          <aside class="hero__card">
+            <div class="hero__card-head">
+              <span class="eyebrow eyebrow--paper">Currently building</span>
+              <span class="hero__card-dot" aria-hidden="true"></span>
+            </div>
+
+            <div class="hero__card-list">
+              <span>M.A.P.L.E.</span>
+              <span>Art in Progress</span>
+              <span>Small Business Loan Predictor</span>
+            </div>
+
+            <div class="hero__card-foot">
+              <a class="arrow-link arrow-link--gold" href="work.html">
+                See what I'm working on
+                <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================
+         SECTION 2 — FEATURED WORK
+         =================================================================== -->
+    <section class="section work" id="work">
+      <div class="container split">
+
+        <!-- Left column: the introduction. -->
+        <div class="split__intro reveal">
+          <span class="eyebrow">Featured work</span>
+          <h2>What I'm<br />building</h2>
+          <p class="lede">
+            Three main projects I'm deeply passionate about and constantly
+            improving. Each solving real problems for real people.
+          </p>
+          <a class="arrow-link" href="work.html">
+            View all projects
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Right column: the three project cards.
+             Each card is an <article> because it stands on its own.
+             data-delay staggers the reveal animation (see base.css). -->
+        <div class="work__grid">
+
+          <article class="card reveal" data-delay="1">
+            <div class="card__media">
+              <!-- REPLACE: images/project-ai.jpg -->
+              <img src="images/project-ai.jpg" alt="The M.A.P.L.E dashboard" />
+            </div>
+            <div class="card__body">
+              <span class="eyebrow">AI / Agents</span>
+              <h3><a href="maple.html">M.A.P.L.E.</a></h3>
+              <p class="lede">
+                A personal AI assistant designed to understand context, learn from my decisions, and turn ideas and everyday tasks into action.
+              </p>
+              <div class="card__foot">
+                <a class="arrow-link" href="maple.html">
+                  Explore project
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card reveal" data-delay="2">
+            <div class="card__media">
+              <!-- REPLACE: images/project-art.jpg -->
+              <img src="images/project-art.jpg" alt="A seascape painting on an easel beside brushes" />
+            </div>
+            <div class="card__body">
+              <span class="eyebrow eyebrow--purple">Platform</span>
+              <h3><a href="art-in-progress.html">Art in Progress</a></h3>
+              <p class="lede">
+                A creative platform connecting emerging artists with targeted networking, curated opportunities, and meaningful feedback to help them grow their careers.
+              </p>
+              <div class="card__foot">
+                <a class="arrow-link" href="art-in-progress.html">
+                  Explore project
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card reveal" data-delay="3">
+            <div class="card__media">
+              <!-- REPLACE: images/project-business.jpg -->
+              <img src="images/project-business.jpg" alt="The interior of a small independent shop" />
+            </div>
+            <div class="card__body">
+              <span class="eyebrow eyebrow--sage">Social impact</span>
+              <h3><a href="small-business-prediction-model.html">Small Business Loan Predictor</a></h3>
+              <p class="lede">
+                A machine learning system trained on 899K+ SBA loan records to predict small-business loan outcomes through an interactive Streamlit application.
+              </p>
+              <div class="card__foot">
+                <a class="arrow-link" href="small-business-prediction-model.html">
+                  Explore project
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================
+         SECTION 3 — LEADERSHIP & IMPACT
+         =================================================================== -->
+    <section class="section lead" id="lead">
+      <div class="container split">
+
+        <div class="split__intro reveal">
+          <span class="eyebrow eyebrow--gold">Leadership &amp; impact</span>
+          <h2>Building Teams.<br />Building Connections.</h2>
+          <p class="lede lede--paper">
+            Technical skills mixed with communication and leadership brings me confidence that I can work on any team and any project.
+          </p>
+          <a class="arrow-link arrow-link--gold" href="lead.html">
+            See all experiences
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="lead__grid">
+
+          <div class="lead__item reveal" data-delay="1">
+            <!-- Inline SVG icon. "stroke: currentColor" makes it take its
+                 colour from the CSS, so we never have to edit the icon file. -->
+            <svg class="lead__icon" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="7.5" r="3.2"/>
+              <path d="M2.8 20c0-3.4 2.8-6.2 6.2-6.2S15.2 16.6 15.2 20"/>
+              <circle cx="17.6" cy="9" r="2.3"/>
+              <path d="M16 13.6c2.8.2 4.9 2.6 4.9 5.5"/>
+            </svg>
+            <h3>Innovate Living Learning Community</h3>
+            <p class="lead__role">Director of Engagement &amp; Wing Mentor</p>
+            <p>
+              Leading a community of 170+ students, designing events, fostering
+              connections, and collaborating with university staff and speakers.
+            </p>
+          </div>
+
+          <div class="lead__item reveal" data-delay="2">
+            <svg class="lead__icon" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a5.8 5.8 0 0 0-3.4 10.5c.6.45.9 1.1.9 1.8V16h5v-.7c0-.7.3-1.35.9-1.8A5.8 5.8 0 0 0 12 3Z"/>
+              <path d="M10 19h4"/>
+              <path d="M10.7 21.2h2.6"/>
+            </svg>
+            <h3>Idea Lab</h3>
+            <p class="lead__role">Co-Director</p>
+            <p>
+              An entrepreneurial mentorship program for student startups.
+              Recruited mentors, built curriculum, and helped founders turn
+              ideas into action.
+            </p>
+          </div>
+
+          <div class="lead__item reveal" data-delay="3">
+            <svg class="lead__icon" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.4 6.6a4.7 4.7 0 0 0-6.7 0L12 8.3l-1.7-1.7a4.7 4.7 0 1 0-6.7 6.7L12 21.2l8.4-7.9a4.7 4.7 0 0 0 0-6.7Z"/>
+            </svg>
+            <h3>Project Linus</h3>
+            <p class="lead__role">Volunteer</p>
+            <p>
+              Donating handmade blankets to children in hospitals, because
+              small acts of kindness can bring warmth and comfort.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section skills" id="skills" aria-labelledby="skills-heading">
+      <div class="container split">
+        <div class="split__intro">
+          <span class="eyebrow">Technical toolkit &amp; recognition</span>
+          <h2 id="skills-heading">Skills</h2>
+        </div>
+        <div class="skills__grid">
+          <div class="skills__group">
+              <h3>Languages</h3>
+              <ul class="skills__tags"><li>Python</li><li>Java</li><li>C</li><li>JavaScript</li><li>TypeScript</li><li>SQL</li><li>MATLAB</li></ul>
+            </div>
+          <div class="skills__group">
+              <h3>Frameworks &amp; Libraries</h3>
+              <ul class="skills__tags"><li>Next.js</li><li>React</li><li>FastAPI</li><li>Scikit-learn</li></ul>
+            </div>
+          <div class="skills__group">
+              <h3>Databases</h3>
+              <ul class="skills__tags"><li>PostgreSQL</li><li>Firebase Firestore</li></ul>
+            </div>
+          <div class="skills__group">
+              <h3>Tools &amp; Technologies</h3>
+              <ul class="skills__tags"><li>Git</li><li>Docker</li><li>Linux</li><li>Alembic</li><li>Cloudinary</li><li>Streamlit</li></ul>
+            </div>
+          <div class="skills__group">
+              <h3>Certifications</h3>
+              <ul class="skills__credentials"><li>Stanford Machine Learning Specialization</li><li>15 Anthropic courses</li><li>AWS AI Practitioner (In Progress)</li></ul>
+            </div>
+          <div class="skills__group">
+              <h3>APEX Center for Entrepreneurship</h3>
+              <ul class="skills__credentials"><li>Spring 2026 Showcase Presenter</li><li>$500 Venture Grant Recipient</li></ul>
+            </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- ===================================================================
+         SECTION 4 — TECH IN 100 WORDS (carousel)
+         =================================================================== -->
+    <section class="section explore" id="explore">
+      <div class="container split">
+
+        <div class="split__intro reveal">
+          <span class="eyebrow">Explore</span>
+          <h2>Tech in<br />100 Words<br />or Less</h2>
+
+          <!-- The hand-drawn underline. It is a single curved SVG line.
+               "d" is the path: M = move to, C = draw a curve. -->
+          <svg class="explore__swash" width="150" height="16" viewBox="0 0 150 16"
+               fill="none" aria-hidden="true">
+            <path d="M2 11C24 5 52 3 82 5.5c22 1.8 44 5.5 66 8"
+                  stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+
+          <p class="lede">
+            Short explanations of interesting technologies, concepts, and ideas
+            I'm learning about.
+          </p>
+          <a class="arrow-link" href="explore.html">
+            Read latest
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- The carousel. script.js wires up the arrow and the dots. -->
+        <div class="carousel reveal" data-delay="1">
+
+          <!-- role="region" + aria-label tell screen readers this scrolling
+               strip is a named landmark they can navigate to. -->
+          <div class="carousel__track" id="carousel-track"
+               role="region" aria-label="Tech in 100 words, scrollable list">
+
+            <article class="card carousel__card">
+              <div class="card__media">
+                <!-- REPLACE: images/explore-1.jpg -->
+                <img src="images/explore-1.jpg" alt="Flowing blue topographic lines" />
+              </div>
+              <div class="card__body">
+                <h3>What is RAG?</h3>
+                <p>How AI assistants use your documents to answer questions.</p>
+                <div class="carousel__meta">
+                  
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- This invisible link makes the whole card clickable. -->
+              <a class="sr-only" href="explore.html#what-is-rag">Read: What is RAG?</a>
+            </article>
+
+            
+
+            <article class="card carousel__card">
+              <div class="card__media">
+                <!-- REPLACE: images/explore-3.jpg -->
+                <img src="images/explore-3.jpg" alt="A cluster of floating grey cubes" />
+              </div>
+              <div class="card__body">
+                <h3>Why are vector databases useful?</h3>
+                <p>Finding related information, even when the words differ.</p>
+                <div class="carousel__meta">
+                  
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <a class="sr-only" href="explore.html#vector-databases">Read: Why are vector databases useful?</a>
+            </article>
+
+            <article class="card carousel__card">
+              <div class="card__media">
+                <!-- REPLACE: images/explore-4.jpg -->
+                <img src="images/explore-4.jpg" alt="A dark code editor window" />
+              </div>
+              <div class="card__body">
+                <h3>What is an MCP server?</h3>
+                <p>How AI applications connect to tools and data.</p>
+                <div class="carousel__meta">
+                  
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                    <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+              <a class="sr-only" href="explore.html#mcp-server">Read: What is an MCP server?</a>
+            </article>
+
+          </div>
+
+          <!-- The round "next" button. -->
+          <button class="carousel__next" id="carousel-next" aria-label="Show next articles">
+            <svg width="15" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <!-- The pagination dots. script.js fills this in and keeps the
+               active one in sync as you scroll. -->
+          <div class="carousel__dots" id="carousel-dots"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================
+         SECTION 5 — OUTSIDE THE CODE (the torn-edge dark band)
+         =================================================================== -->
+    <section class="create" id="create">
+      <!-- "split--tight" narrows the left intro column so the four hobby
+           columns get more room. -->
+      <div class="container split split--tight">
+
+        <div class="split__intro reveal">
+          <span class="eyebrow eyebrow--purple-light">Create</span>
+          <h2>Outside<br /><em style="font-style:italic;">the code.</em></h2>
+        </div>
+
+        <div class="create__grid">
+
+          <div class="create__item reveal" data-delay="1">
+            <div class="create__text">
+              <svg class="create__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M17.2 3.4 20.6 6.8 11.4 16 8 12.6Z"/>
+                <path d="M8 12.6c-2 .1-3.4 1.7-3.4 3.7 0 1.3-.6 2.3-1.6 3 2.6.7 5.9.1 6.9-2.1.5-1.2.3-2.5-.5-3.3"/>
+              </svg>
+              <h3>Painting</h3>
+              <p>What Words Can&rsquo;t Describe</p>
+              <a class="arrow-link arrow-link--paper" href="painting.html">
+                View gallery
+                <svg width="14" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <div class="create__thumb">
+              <!-- REPLACE: images/create-painting.jpg -->
+              <img src="images/create-painting.jpg" alt="A painting of a lighthouse at sunset" />
+            </div>
+          </div>
+
+          <div class="create__item reveal" data-delay="2">
+            <div class="create__text">
+              <svg class="create__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 6.6C10.4 5 8.4 4.5 3.8 4.5v13c4.6 0 6.6.5 8.2 2 1.6-1.5 3.6-2 8.2-2v-13c-4.6 0-6.6.5-8.2 2Z"/>
+                <path d="M12 6.6v12.9"/>
+              </svg>
+              <h3>Reading</h3>
+              <p>Current Reads</p>
+              <a class="arrow-link arrow-link--paper" href="reading.html">
+                Current reads
+                <svg width="14" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <div class="create__thumb">
+              <!-- REPLACE: images/create-reading.jpg -->
+              <img src="images/create-reading.jpg" alt="A stack of old books beside a cup of coffee" />
+            </div>
+          </div>
+
+          <div class="create__item reveal" data-delay="3">
+            <div class="create__text">
+              <svg class="create__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M15.4 3.8 20.2 8.6 8.8 20H4v-4.8Z"/>
+                <path d="M13.4 5.8 18.2 10.6"/>
+              </svg>
+              <h3>French</h3>
+              <p>Learning to read, write, and speak French.</p>
+              <a class="arrow-link arrow-link--paper" href="french.html">
+                Read more
+                <svg width="14" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <div class="create__thumb">
+              <!-- REPLACE: images/create-writing.jpg -->
+              <img src="images/create-writing.jpg" alt="A castle on a hill under a stormy sky" />
+            </div>
+          </div>
+
+          <div class="create__item reveal" data-delay="4">
+            <div class="create__text">
+              <svg class="create__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.1" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M2.5 18.5 9 8l3.6 5.6L15 10l6.5 8.5Z"/>
+                <circle cx="17.5" cy="5.5" r="1.6"/>
+              </svg>
+              <h3>Life</h3>
+              <p>I like learning new things.</p>
+              <a class="arrow-link arrow-link--paper" href="life.html">
+                See moments
+                <svg width="14" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+                  <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            <div class="create__thumb">
+              <!-- REPLACE: images/create-life.jpg -->
+              <img src="images/create-life.jpg" alt="A cliff path above the ocean at dusk" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================
+         SECTION 6 — WHAT I'M FOCUSED ON (timeline)
+         =================================================================== -->
+    <section class="section focus" id="about">
+      <div class="container split">
+
+        <div class="split__intro reveal">
+          <span class="eyebrow">Currently</span>
+          <h2>What I'm<br />focused on</h2>
+          <a class="arrow-link" href="about.html">
+            More about me
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="timeline reveal" data-delay="1">
+          <div class="timeline__items">
+
+            <div>
+              <div class="timeline__head">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8.5 16.5 4 12l4.5-4.5"/>
+                  <path d="M15.5 7.5 20 12l-4.5 4.5"/>
+                  <path d="M13.4 5.2 10.6 18.8"/>
+                </svg>
+                <h3>Building</h3>
+              </div>
+              <p>Improving M.A.P.L.E with real user feedback.</p>
+            </div>
+
+            <div>
+              <div class="timeline__head">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15.4 3.8 20.2 8.6 8.8 20H4v-4.8Z"/>
+                  <path d="M13.4 5.8 18.2 10.6"/>
+                </svg>
+                <h3>Designing</h3>
+              </div>
+              <p>New features for Art in Progress coming soon.</p>
+            </div>
+
+            <div>
+              <div class="timeline__head">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 5 2.5 9.2 12 13.4l9.5-4.2Z"/>
+                  <path d="M6.2 11.4V16c0 1.7 2.6 3 5.8 3s5.8-1.3 5.8-3v-4.6"/>
+                </svg>
+                <h3>Learning</h3>
+              </div>
+              <p>Advanced LLMs, product design, and entrepreneurship.</p>
+            </div>
+
+            <div>
+              <div class="timeline__head">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="6.2" y="3" width="11.6" height="18" rx="1.6"/>
+                  <path d="M9 7.6h6M9 11.4h6M9 15.2h3.6"/>
+                </svg>
+                <h3>Writing</h3>
+              </div>
+              <p>Every day. Creative writing, thoughts, and ideas in progress.</p>
+            </div>
+
+            <div>
+              <div class="timeline__head">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.8"/>
+                  <path d="M15.6 8.4 13.6 13.6 8.4 15.6 10.4 10.4Z"/>
+                </svg>
+                <h3>Exploring</h3>
+              </div>
+              <p>The intersection of AI, creativity, and human potential.</p>
+            </div>
+
+          </div>
+
+          <!-- The rail of dots. Purely decorative, so it is hidden from
+               screen readers. -->
+          <div class="timeline__rail" aria-hidden="true">
+            <span class="timeline__node is-current"></span>
+            <span class="timeline__node"></span>
+            <span class="timeline__node"></span>
+            <span class="timeline__node"></span>
+            <span class="timeline__node"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================================
+       FOOTER
+       ===================================================================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+
+      <p class="footer__script">
+        Let's build something<br />extraordinary together.
+      </p>
+
+      <div>
+        <h2 class="footer__heading">Let's connect!</h2>
+        <div class="footer__socials">
+
+          <!-- Email contact link. -->
+          <a class="footer__social" href="mailto:anishapulla55@gmail.com">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2.5" y="5" width="19" height="14" rx="1.8"/>
+              <path d="m3 6.5 9 6.6 9-6.6"/>
+            </svg>
+            <span>Email me</span>
+          </a>
+
+          <!-- LinkedIn profile. -->
+          <a class="footer__social" href="https://www.linkedin.com/in/anisha-pulla" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M4.98 3.5a2.5 2.5 0 1 0 .02 5 2.5 2.5 0 0 0-.02-5ZM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.3c0-1.27-.02-2.9-1.8-2.9-1.8 0-2.07 1.38-2.07 2.81V21h-4z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+
+          <!-- GitHub profile. -->
+          <a class="footer__social" href="https://github.com/anishapulla55" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.05.78 2.12v3.15c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="footer__meta">
+        <!-- &copy; is the HTML "entity" for the © symbol. -->
+        <p>&copy; 2026 Anisha Pulla</p>
+        <p>Designed &amp; built with <span class="footer__heart">&hearts;</span><br />and lots of coffee</p>
+      </div>
+
+      <!-- The compass-rose ornament in the bottom right of the design. -->
+      <svg class="footer__compass" width="64" height="64" viewBox="0 0 64 64" fill="none"
+           stroke="currentColor" stroke-width="1" aria-hidden="true">
+        <path d="M32 3 35.5 28.5 61 32 35.5 35.5 32 61 28.5 35.5 3 32 28.5 28.5Z"/>
+        <path d="M48 16 34.5 29.5M16 48l13.5-13.5M48 48 34.5 34.5M16 16l13.5 13.5" opacity="0.55"/>
+      </svg>
+
+    </div>
+  </footer>
+
+  <!-- The script goes at the very END of the body, so all the HTML above it
+       already exists by the time the script runs and looks for elements. -->
+  <script src="js/script.js"></script>
+</body>
+</html>

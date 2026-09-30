@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!-- ABOUT.HTML — the bio and the full timeline.
+     Head, header and footer are copied from index.html — see the note there. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About Anisha Pulla — computer scientist, AI Engineer, and entrepreneur." />
+  <title>About — Anisha Pulla</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+
+<body>
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <header class="header" id="site-header">
+    <div class="header__inner">
+      <a class="brand" href="index.html" aria-label="Anisha Pulla — home">
+        <span class="brand__mark">AP</span>
+        <span class="brand__name">Anisha Pulla</span>
+      </a>
+
+      <nav class="nav" id="primary-nav">
+        <a class="nav__link" href="work.html">Work</a>
+        <a class="nav__link" href="lead.html">Lead</a>
+        <a class="nav__link" href="explore.html">Explore</a>
+        <a class="nav__link" href="create.html">Create</a>
+        <a class="nav__link" href="about.html">About</a>
+      </nav>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <!-- Open the resume PDF in a new tab. -->
+        <a class="btn-pill" href="Anisha_Pulla_Resume.pdf" id="resume-link" target="_blank" rel="noopener">
+          Resume
+          <span class="btn-pill__arrow">
+            <svg width="13" height="9" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu"
+                aria-controls="primary-nav" aria-expanded="false">
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <main id="main">
+
+    <section class="page-head">
+      <div class="container">
+        <a class="page-head__back" href="index.html">
+          <svg width="15" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+            <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back home
+        </a>
+        <span class="eyebrow eyebrow--gold">About</span>
+        <h1>I see what could exist.<br />Then I build it.</h1>
+        <p class="lede">
+          Computer scientist, AI Engineer, and entrepreneur passionate
+          about turning ideas into real impact.
+        </p>
+      </div>
+    </section>
+
+    <!-- Bio on the left, current focus on the right. -->
+    <section class="section">
+      <div class="container prose-split">
+
+        <div class="prose reveal">
+          <p>
+            I'm a computer scientist and builder. I like taking an idea that should exist and actually making it.
+          </p>
+          <p>
+            A lot of what I build starts with a problem that affects a lot of people. I'm building M.A.P.L.E. to help turn thoughts into progress when you have a million ideas but don't know where to start. I started Art In Progress after noticing how isolated and old-school the art industry can be. I want to revolutionize the way artists build their careers.
+          </p>
+          <p>
+            I also really enjoy the people side of building. I run a 170-student living-learning community, co-directed a mentorship program for student founders, and volunteer with Project Linus. I like creating things, but I also like helping other people turn their ideas into something real.
+          </p>
+          <p>
+            Outside of computer science, I paint, I read, and I explore.
+          </p>
+        </div>
+
+        <div class="reveal" data-delay="1">
+          <span class="eyebrow">Currently</span>
+          <h2 style="margin-block:14px 26px;">What I'm<br />focused on</h2>
+
+          <!-- The vertical version of the homepage timeline. The item marked
+               is-current gets the filled blue dot. -->
+          <div class="vtimeline">
+
+            <div class="vtimeline__item is-current">
+              <h3>Building</h3>
+              <p>Improving AI Research Assistant with real user feedback.</p>
+            </div>
+
+            <div class="vtimeline__item">
+              <h3>Designing</h3>
+              <p>New features for Art in Progress coming soon.</p>
+            </div>
+
+            <div class="vtimeline__item">
+              <h3>Learning</h3>
+              <p>Advanced LLMs, product design, and entrepreneurship.</p>
+            </div>
+
+            <div class="vtimeline__item">
+              <h3>Writing</h3>
+              <p>Every day. Creative writing, thoughts, and ideas in progress.</p>
+            </div>
+
+            <div class="vtimeline__item">
+              <h3>Exploring</h3>
+              <p>The intersection of AI, creativity, and human potential.</p>
+            </div>
+
+          </div>
+
+          <a class="arrow-link" href="work.html" style="margin-top:8px;">
+            See what I'm building
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M1 5h13M10 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__script">
+        Let's build something<br />extraordinary together.
+      </p>
+
+      <div>
+        <h2 class="footer__heading">Let's connect!</h2>
+        <div class="footer__socials">
+          <!-- Email contact link. -->
+          <a class="footer__social" href="mailto:anishapulla55@gmail.com">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2.5" y="5" width="19" height="14" rx="1.8"/>
+              <path d="m3 6.5 9 6.6 9-6.6"/>
+            </svg>
+            <span>Email me</span>
+          </a>
+          <!-- LinkedIn profile. -->
+          <a class="footer__social" href="https://www.linkedin.com/in/anisha-pulla" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M4.98 3.5a2.5 2.5 0 1 0 .02 5 2.5 2.5 0 0 0-.02-5ZM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.05c.53-.95 1.83-1.95 3.76-1.95 4.02 0 4.76 2.5 4.76 5.76V21h-4v-5.3c0-1.27-.02-2.9-1.8-2.9-1.8 0-2.07 1.38-2.07 2.81V21h-4z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <!-- GitHub profile. -->
+          <a class="footer__social" href="https://github.com/anishapulla55" target="_blank" rel="noopener noreferrer">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.05.78 2.12v3.15c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__meta">
+        <p>&copy; 2026 Anisha Pulla</p>
+        <p>Designed &amp; built with <span class="footer__heart">&hearts;</span><br />and lots of coffee</p>
+      </div>
+
+      <svg class="footer__compass" width="64" height="64" viewBox="0 0 64 64" fill="none"
+           stroke="currentColor" stroke-width="1" aria-hidden="true">
+        <path d="M32 3 35.5 28.5 61 32 35.5 35.5 32 61 28.5 35.5 3 32 28.5 28.5Z"/>
+        <path d="M48 16 34.5 29.5M16 48l13.5-13.5M48 48 34.5 34.5M16 16l13.5 13.5" opacity="0.55"/>
+      </svg>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
